@@ -1,0 +1,8 @@
+-*- mode: compilation; default-directory: "/home/laurent-dev/Dropbox/dev/cache-thrashing/" -*-
+Compilation started at Sun Jan  6 15:21:07
+
+g++ loop-cache-thrashing.cpp && ./a.out
+Time: 0.003300ms
+Time: 0.018100ms
+
+Compilation finished at Sun Jan  6 15:21:09

