@@ -10,6 +10,7 @@ def distance(theta1, phi1, theta2, phi2):
     return sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2 + (p2[2]-p1[2])**2)
 
 def NEPlane(direction, step, start_theta = 0, start_phi = 0, filename = 'plot/NEPlane.dat'):
+    initFile(filename)
     D = 0
     theta = start_theta
     old_phi = start_phi
@@ -21,11 +22,14 @@ def NEPlane(direction, step, start_theta = 0, start_phi = 0, filename = 'plot/NE
             theta = theta - 2*pi
         old_phi = phi
         old_theta = theta
-        writeResult(filename, theta*180/pi, phi*180/pi)
+        appendResultToFile(filename, theta*180/pi, phi*180/pi)
         print("(" + str(phi*180/pi) + "," + str(theta*180/pi) + ") D=" + str(D))
     return D
 
-def writeResult(filename, theta, phi):
+def initFile(filename):
+    f = open(filename, 'w')
+    f.close()
+def appendResultToFile(filename, theta, phi):
     f = open(filename, 'a')
     f.write(str(theta) + '\t' + str(phi) + '\n')
 
