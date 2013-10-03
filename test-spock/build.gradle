@@ -1,0 +1,28 @@
+apply plugin: "groovy"
+
+repositories {
+  mavenCentral()
+  maven {
+      // Look for POMs and artifacts, such as JARs, here
+      url "https://oss.sonatype.org/content/repositories/snapshots"
+  }
+}
+
+dependencies {
+  groovy "org.codehaus.groovy:groovy-all:2.1.6"
+  testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
+}
+
+// Source sets
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src']
+        }
+    }
+    test {
+        groovy {
+            srcDirs = ['test']
+        }
+    }
+}
