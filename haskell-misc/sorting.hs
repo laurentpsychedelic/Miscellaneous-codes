@@ -10,9 +10,14 @@ main = do
   -- putStrLn( "\tFlat:\t " ++ show( flattenS yt ) )
   timeIt( putStrLn( "\tSorted:\t " ++ showPartial 10 ( sortS xs ) ) )
   putStrLn( "  Sorted? -> " ++ show( isSorted ys ) )
+  putStrLn( "<<BubbleSort>>" )
+  timeIt( putStrLn( "\tSorted:\t " ++ showPartial 10 ( bubbleSort xs ) ) )
+  putStrLn( "  Sorted? -> " ++ show( isSorted zs ) )
+  
     where ys = sortS xs
           -- yt = mkStree xs
-          xs = getRandomArray 100000 0 1000
+          zs = bubbleSort xs
+          xs = getRandomArray 10000 0 1000
 
 getRandomArray :: Integer -> Int -> Int -> [ Int ]
 getRandomArray n min max = [ getRandomNumber min max | x <- [ 1 .. n ] ]
@@ -39,6 +44,16 @@ isSorted [ x ] = True
 
 sortS :: (Ord a) => [ a ] -> [ a ]
 sortS = flattenS . mkStree
+
+bubbleSort :: (Ord a) => [ a ] -> [ a ]
+bubbleSort [] = []
+bubbleSort( xs ) = bubbleSort( zs ) ++ z
+  where (zs, z) = splitAt (length ys - 1) ys
+        ys = doPermutations( xs )
+
+doPermutations :: (Ord a) => [ a ] -> [ a ]
+doPermutations( x:y:ys ) = if x > y then y:doPermutations(x:ys) else x:doPermutations(y:ys)
+doPermutations( x:[] ) = [ x ]
 
 unwrap :: [ a ] -> a
 unwrap [ x ] = x
