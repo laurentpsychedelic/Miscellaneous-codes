@@ -9,6 +9,7 @@ main = do
   putStrLn( "<<Stree>>" )
   putStrLn( "\tTree:\t " ++ show( yt ) )
   putStrLn( "\tFlat:\t " ++ show( flattenS yt ) )
+  putStrLn( "\tSorted:\t " ++ show( sortS xs ) )
     where xt = mkBtree xs
           yt = mkStree xs
           xs = [ 4.5, 4, 3, 7, 2, 1, 8, 6, 5, 9 ]
@@ -33,6 +34,9 @@ mkStree [] = Null
 mkStree( x:xs ) = ForkS (mkStree ys) x (mkStree zs)
   where ys = filter (< x) xs
         zs = filter (> x) xs
+
+sortS :: Ord a => [ a ] -> [ a ]
+sortS = flattenS . mkStree
 
 unwrap :: [ a ] -> a
 unwrap [ x ] = x
