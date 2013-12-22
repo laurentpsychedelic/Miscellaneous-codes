@@ -1,6 +1,7 @@
 import System.TimeIt
 import System.Random
 import System.IO.Unsafe
+import Data.Tuple
 
 main = do
   putStrLn( "List:\t " ++ showPartial 10 ( xs ) )
@@ -10,14 +11,19 @@ main = do
   -- putStrLn( "\tFlat:\t " ++ show( flattenS yt ) )
   timeIt( putStrLn( "\tSorted:\t " ++ showPartial 10 ( sortS xs ) ) )
   putStrLn( "  Sorted? -> " ++ show( isSorted ys ) )
+  putStrLn( "Benchmark:" )
+  sequence_ [ timeIt( putStrLn( (showPartial 1) ( sortS( getRandomArray n 0 1000 ) ) ) ) | n <- ns ]
   putStrLn( "<<BubbleSort>>" )
   timeIt( putStrLn( "\tSorted:\t " ++ showPartial 10 ( bubbleSort xs ) ) )
   putStrLn( "  Sorted? -> " ++ show( isSorted zs ) )
+  putStrLn( "Benchmark:" )
+  sequence_ [ timeIt( putStrLn( (showPartial 1) ( bubbleSort( getRandomArray n 0 1000 ) ) ) ) | n <- ns ]
   
     where ys = sortS xs
           -- yt = mkStree xs
           zs = bubbleSort xs
-          xs = getRandomArray 10000 0 1000
+          xs = getRandomArray 1000 0 1000
+          ns = [ 100,200..2000 ]
 
 getRandomArray :: Integer -> Int -> Int -> [ Int ]
 getRandomArray n min max = [ getRandomNumber min max | x <- [ 1 .. n ] ]
@@ -26,6 +32,8 @@ getRandomNumber :: Int -> Int -> Int
 getRandomNumber min max = unsafePerformIO( getStdRandom( randomR(min, max) ) )
 
 showPartial :: (Show a) => Int -> [ a ] -> String
+showPartial 0 xs = "[...]"
+showPartial 1 xs = "[" ++ show(head xs) ++ ",...]"
 showPartial n xs = if n+1 < length xs then "[" ++ foldl append "" (take n xs) ++ ",...," ++ show(last xs) ++ "]" else show xs
   where append a b = if null a then show b else a ++ "," ++ show b
 data Stree a = Null | ForkS (Stree a) a (Stree a)
