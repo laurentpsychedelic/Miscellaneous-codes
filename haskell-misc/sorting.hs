@@ -15,14 +15,20 @@ main = do
   putStrLn( "  Sorted? -> " ++ show( isSorted bs ) )
   putStrLn( "Benchmark:" )
   sequence_ [ timeIt( putStrLn( (showPartial 1) ( sortH( getRandomArray n 0 1000 ) ) ) ) | n <- ns ]
+  putStrLn( "<<Htree2>>" )
+  timeIt( putStrLn( "\tSorted:\t " ++ showPartial 10 ( sortH2 xs ) ) )
+  putStrLn( "  Sorted? -> " ++ show( isSorted cs ) )
+  putStrLn( "Benchmark:" )
+  sequence_ [ timeIt( putStrLn( (showPartial 1) ( sortH2( getRandomArray n 0 1000 ) ) ) ) | n <- ns ]
   putStrLn( "<<BubbleSort>>" )
   timeIt( putStrLn( "\tSorted:\t " ++ showPartial 10 ( bubbleSort xs ) ) )
-  putStrLn( "  Sorted? -> " ++ show( isSorted cs ) )
+  putStrLn( "  Sorted? -> " ++ show( isSorted ds ) )
   putStrLn( "Benchmark:" )
   sequence_ [ timeIt( putStrLn( (showPartial 1) ( bubbleSort( getRandomArray n 0 1000 ) ) ) ) | n <- ns ]
     where as = sortS xs
           bs = sortH xs
-          cs = bubbleSort xs
+          cs = sortH2 xs
+          ds = bubbleSort xs
           xs = getRandomArray 1000 0 1000
           ns = [ 100,200..2000 ]
 
@@ -60,8 +66,30 @@ mkHtree xs
           ( ys, zs ) = splitAt m ts
           ( x, ts ) = splitAt 1 xs 
 
+mkHtree2 :: (Ord a) => [ a ] -> Htree a
+mkHtree2 = head . mkHtrees . levels
+
+mkHtrees :: (Ord a) => [ [ a ] ] -> [ Htree a ]
+mkHtrees = foldr addLayer [ NullH ]
+
+addLayer :: (Ord a) => [ a ] -> [ Htree a ] -> [ Htree a ]
+addLayer [] zt = []
+addLayer (x:xs) (y:z:zts) = wrap (ForkH x y z) ++ addLayer xs zts
+addLayer (x:xs) (z:zts) = wrap (ForkH x z NullH) ++ addLayer xs zts
+addLayer (x:xs) [] = wrap (ForkH x NullH NullH) ++ addLayer xs []
+
+levels :: [ a ] -> [ [ a ] ]
+levels = levelsWith 1
+
+levelsWith :: Int -> [ a ] -> [ [ a ] ]
+levelsWith n xs = if n < length xs then wrap ys ++ levelsWith (2 * n) zs else wrap ys
+  where (ys, zs) = splitAt n xs
+
 mkHeap :: (Ord a) => [ a ] -> Htree a
 mkHeap = heapify . mkHtree
+
+mkHeap2 :: (Ord a) => [ a ] -> Htree a
+mkHeap2 = heapify . mkHtree2
 
 heapify :: (Ord a) => Htree a -> Htree a
 heapify NullH = NullH 
@@ -86,6 +114,9 @@ sortS = flattenS . mkStree
 
 sortH :: (Ord a) => [ a ] -> [ a ]
 sortH = flattenH . mkHeap
+
+sortH2 :: (Ord a) => [ a ] -> [ a ]
+sortH2 = flattenH . mkHeap2
 
 bubbleSort :: (Ord a) => [ a ] -> [ a ]
 bubbleSort [] = []

@@ -46,8 +46,30 @@ mkHtree xs
           ( ys, zs ) = splitAt m ts
           ( x, ts ) = splitAt 1 xs 
 
+mkHtree2 :: (Ord a) => [ a ] -> Htree a
+mkHtree2 = head . mkHtrees . levels
+
+mkHtrees :: (Ord a) => [ [ a ] ] -> [ Htree a ]
+mkHtrees = foldr addLayer [ NullH ]
+
+addLayer :: (Ord a) => [ a ] -> [ Htree a ] -> [ Htree a ]
+addLayer [] zt = []
+addLayer (x:xs) (y:z:zts) = wrap (ForkH x y z) ++ addLayer xs zts
+addLayer (x:xs) (z:zts) = wrap (ForkH x z NullH) ++ addLayer xs zts
+addLayer (x:xs) [] = wrap (ForkH x NullH NullH) ++ addLayer xs []
+
+levels :: [ a ] -> [ [ a ] ]
+levels = levelsWith 1
+
+levelsWith :: Int -> [ a ] -> [ [ a ] ]
+levelsWith n xs = if n < length xs then wrap ys ++ levelsWith (2 * n) zs else wrap ys
+  where (ys, zs) = splitAt n xs
+
 mkHeap :: (Ord a) => [ a ] -> Htree a
 mkHeap = heapify . mkHtree
+
+mkHeap2 :: (Ord a) => [ a ] -> Htree a
+mkHeap2 = heapify . mkHtree2
 
 heapify :: (Ord a) => Htree a -> Htree a
 heapify NullH = NullH 
