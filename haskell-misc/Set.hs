@@ -12,14 +12,36 @@ showAsTree xt = showStree2 xt (valueWidth xt) None
 buildSet :: Ord a => [ a ] -> Set a
 buildSet = mkStree
 
-insert :: Ord a => a -> Set a -> Set a
-insert a mp = error "Not yet implemented!"
+insert :: Ord a => a -> Stree a -> Stree a
+insert a Null = Fork Null a Null
+insert a (Fork xt x yt)
+  | a == x = Fork xt x yt
+  | a < x  = Fork (insert a xt) x yt
+  | a > x  = Fork xt x (insert a yt)
 
-remove :: Ord a => a -> Set a -> Set a
-remove a mp = error "Not yet implemented!"
+remove :: Ord a => a -> Stree a -> Stree a
+remove a Null = Null
+remove a (Fork xt x yt)
+  | a < x = Fork (remove a xt) x yt
+  | a > x = Fork xt x (remove a yt)
+  | a == x = mergeTrees xt yt
 
-contains :: Ord a => a -> Set a -> Bool
-contains a mp = error "Not yet implemented!"
+mergeTrees :: (Ord a) => Stree a -> Stree a -> Stree a
+mergeTrees xt Null = xt
+mergeTrees Null yt = yt
+mergeTrees xt yt = Fork xt l zt
+  where (l, zt) = deleteLeast yt
+
+deleteLeast :: (Ord a) => Stree a -> (a, Stree a)
+deleteLeast (Fork Null x Null) = (x, Null)
+deleteLeast (Fork xt x yt) = (l, Fork zt x yt)
+  where (l, zt) = deleteLeast xt
+
+contains :: Ord a => a -> Stree a -> Bool
+contains a Null = False
+contains a (Fork xt x yt)
+  | a == x = True
+  | otherwise = if contains a xt then True else contains a yt
 
 mkStree :: Ord a => [ a ] -> Stree a
 mkStree [] = Null
