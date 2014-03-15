@@ -10,7 +10,7 @@ LIBS =
 default: run
 
 run: rebuild
-	./bootstrapper.exe
+	./bootstrapper.exe arg1 arg2 "long arg with spaces"
 
 rebuild: clean build
 

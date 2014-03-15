@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo '#include <Stdio.h>
-int main(int ac, char *av[]) {
-    printf("ac=%d\n", ac);
-    for (int i = 1; i < ac; i++) {
-        printf("    argv[%d]=%s\n", i, av[i]);
+int main(int argc, char *argv[]) {
+    printf("argc=%d\n", argc);
+    for (int i = 1; i < argc; i++) {
+        printf("    argv[%d]=%s\n", i, argv[i]);
     }
     getchar();
 }

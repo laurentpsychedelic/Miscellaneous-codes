@@ -1,15 +1,18 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include <windows.h>
-
-int main(int ac, char *av[]) {
+#define BUFFER_SIZE 1024
+int main(int argc, char *argv[]) {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
-    char cmd[512];
+    char cmd[BUFFER_SIZE], buff[BUFFER_SIZE];
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
-    sprintf(cmd, "bin\\jre\\bin\\java.exe -jar dist/WPA_VIEW.jar %s", ac > 1 ? av[1] : "");
+    snprintf(cmd, 511, "bin\\jre\\bin\\java.exe -jar dist/WPA_VIEW.jar ");
+    for (int i = 1; i < argc; i++) {
+        snprintf(buff, BUFFER_SIZE, "%s \"%s\"", cmd, argv[i]);
+        snprintf(cmd, BUFFER_SIZE, buff);
+    }
 
     //create the proc with this cmd
     if (!CreateProcess(NULL, cmd, NULL, NULL, 0, 0, NULL, NULL, &si, &pi)) {
