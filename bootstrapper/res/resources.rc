@@ -1,1 +1,24 @@
-id ICON "icon.ico"
+AppIcon ICON "icon.ico"
+
+AppVersion VERSIONINFO
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 2, 4, 0, 0
+FILEFLAGSMASK 0
+FILEOS 0x40000
+FILETYPE 1
+{
+  BLOCK "StringFileInfo"
+  {
+    BLOCK "040904E4"
+    {
+      VALUE "CompanyName", "My Company, Incorporated"
+      VALUE "FileDescription", "My pure product"
+      VALUE "FileVersion", "1.0"
+      VALUE "InternalName", "bootstrapper"
+      VALUE "LegalCopyright", "(c) 2014, My Company, Incorporated"
+      VALUE "OriginalFileName", "BootStrapper"
+      VALUE "ProductName", "Super Software Pro"
+      VALUE "Product Version", "2.4"
+    }
+  }
+}

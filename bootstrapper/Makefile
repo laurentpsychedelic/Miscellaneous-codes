@@ -18,10 +18,10 @@ clean:
 	rm -vf *.o
 
 build: resources bootstrapper.o
-	$(CC) -o bootstrapper.exe $(OBJS) res.bin $(LIBS) $(LFLAGS) 
+	$(CC) -o bootstrapper.exe $(OBJS) res.res $(LIBS) $(LFLAGS)
 
 resources:
-	$(WINDRES) res/resources.rc -o res.bin
+	$(WINDRES) -i res/resources.rc -o res.res -O coff
 
 bootstrapper.o:
 	$(CC) -c -o bootstrapper.o Bootstrap.cpp $(CFLAGS) $(INCLUDES)
