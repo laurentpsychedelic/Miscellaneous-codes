@@ -1,15 +1,16 @@
-WINDRES = i686-w64-mingw32-windres
+WINDRES = windres
 OBJS = bootstrapper.o
-CC = i686-w64-mingw32-g++
+CC = g++
 OPTIONS = "-s"
 CFLAGS = -Wall
-LFLAGS = ${OPTIONS}
+LFLAGS = -mwindows ${OPTIONS}
 INCLUDES = 
 LIBS = 
 
 default: run
 
 run: rebuild
+	./bootstrapper.exe
 
 rebuild: clean build
 
