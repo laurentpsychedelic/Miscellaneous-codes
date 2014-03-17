@@ -21,7 +21,7 @@ build: resources bootstrapper.o
 	$(CC) -o bootstrapper.exe $(OBJS) res.res $(LIBS) $(LFLAGS)
 
 resources:
-	$(WINDRES) -i res/resources.rc -o res.res -O coff
+	$(WINDRES) -i res/resources.rc -O coff -o res.res
 
 bootstrapper.o:
 	$(CC) -c -o bootstrapper.o Bootstrap.cpp $(CFLAGS) $(INCLUDES)
