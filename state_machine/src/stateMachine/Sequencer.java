@@ -1,11 +1,13 @@
 package stateMachine;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import javax.swing.SwingUtilities;
 
 public class Sequencer {
     private final StateMachine stateMachine = new StateMachine(new StateA());
-    BlockingQueue<Event> events = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Event> events = new LinkedBlockingQueue<>();
     public void postEvent(Event evt) {
         try {
             events.put(evt);
@@ -17,13 +19,24 @@ public class Sequencer {
                 @Override
                 public void run() {
                     while (true) {
-                        Event evt = events.poll();
-                        while (null != evt) {
-                            System.out.println("Process event<" + evt + ">");
-                            stateMachine.processEvent(evt);
-                            evt = events.poll();
-                        }
-                        try { Thread.sleep(intervalMs); } catch (InterruptedException ie) { /* NOTHING */ }
+                        try {
+                            if (events.size() > 0) {
+                                for (final Event evt : events) {
+                                    System.out.println("Process event<" + evt + ">");
+                                    try {
+                                        SwingUtilities.invokeAndWait(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    stateMachine.processEvent(evt);
+                                                }
+                                            });
+                                    } catch (InvocationTargetException ite) {
+                                        System.out.println("Exception in event processing! :: " + ite.getCause());
+                                    }
+                                }
+                            }
+                            Thread.sleep(intervalMs);
+                        } catch (InterruptedException ie) { System.exit(0); } // Never happens!
                     }
                 }
             }).start();
