@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="48C49ACE-90CF-4161-9C6E-9162115A54DD"
+           Name="WiX Patch Example Product"
+           Language="1033"
+           Version="1.0.0"
+           Manufacturer="Dynamo Corporation"
+           UpgradeCode="48C49ACE-90CF-4161-9C6E-9162115A54DD">
+    <Package Description="Installs a file that will be patched."
+             Comments="This Product does not install any executables"
+             InstallerVersion="200"
+             Compressed="yes" />
+
+    <Media  Id="1" Cabinet="product.cab" EmbedCab="yes" />
+    <FeatureRef Id="SampleProductFeature"/>
+  </Product>
+
+  <Fragment>
+    <Feature Id="SampleProductFeature" Title="Sample Product Feature" Level="1">
+      <ComponentRef Id="SampleComponent" />
+    </Feature>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="SampleProductFolder">
+      <Component Id="SampleComponent" Guid="{C28843DA-EF08-41CC-BA75-D2B99D8A1983}" DiskId="1">
+        <File Id="SampleFile" Name="Sample.txt" Source=".\$(var.Version)\Sample.txt" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder" Name="PFiles">
+        <Directory Id="SampleProductFolder" Name="Patch Sample Directory">
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+</Wix>
