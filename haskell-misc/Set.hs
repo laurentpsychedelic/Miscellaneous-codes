@@ -1,4 +1,4 @@
-module Set( Set, buildSet, showAsTree, insert, remove, contains ) where
+module Set( Set, buildSet, show, showAsTree, insert, remove, contains ) where
 
 type Set a = Stree a
 
