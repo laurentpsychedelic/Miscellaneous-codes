@@ -3,7 +3,7 @@ vpath %.h        include
 vpath %.hpp      include
 
 CPP = g++
-OPTIONS = -s
+OPTIONS = -g
 INCLUDES = -I include 
 CFLAGS = -Wall -pedantic -std=c++11 ${MAKE_OPTIONS} ${OPTIONS}
 LFLAGS = ${LIBS} ${OPTIONS}
