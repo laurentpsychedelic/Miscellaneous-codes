@@ -1,0 +1,9 @@
+[package]
+name = "dylib"
+version = "0.1.0"
+authors = ["Laurent FABRE <laurent_psychedelic@hotmail.com>"]
+[lib]
+crate-type = ["dylib"]
+[dependencies]
+
+#--target=i686-pc-windows-gnu
